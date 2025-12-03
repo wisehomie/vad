@@ -212,21 +212,21 @@ class _VadManagerState extends State<VadManager> {
       debugPrint('Error: $message');
     });
 
-    _vadHandler.onEmitChunk.listen((chunkData) {
-      if (settings.enableChunkEmission) {
-        setState(() {
-          recordings.add(Recording(
-            samples: chunkData.samples,
-            type: RecordingType.chunk,
-            chunkIndex: _chunkCounter++,
-            isFinal: chunkData.isFinal,
-          ));
-        });
-        _uiController.scrollToBottom?.call();
-        debugPrint(
-            'Audio chunk emitted #$_chunkCounter (${chunkData.samples.length} samples)${chunkData.isFinal ? ' [FINAL]' : ''}');
-      }
-    });
+    // _vadHandler.onEmitChunk.listen((chunkData) {
+    //   if (settings.enableChunkEmission) {
+    //     setState(() {
+    //       recordings.add(Recording(
+    //         samples: chunkData.samples,
+    //         type: RecordingType.chunk,
+    //         chunkIndex: _chunkCounter++,
+    //         isFinal: chunkData.isFinal,
+    //       ));
+    //     });
+    //     _uiController.scrollToBottom?.call();
+    //     debugPrint(
+    //         'Audio chunk emitted #$_chunkCounter (${chunkData.samples.length} samples)${chunkData.isFinal ? ' [FINAL]' : ''}');
+    //   }
+    // });
   }
 
   void _applySettings(VadSettings newSettings) async {

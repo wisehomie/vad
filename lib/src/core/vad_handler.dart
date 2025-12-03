@@ -48,7 +48,7 @@ class VadHandler {
   final _onVADMisfireController = StreamController<void>.broadcast();
   final _onErrorController = StreamController<String>.broadcast();
   final _onEmitChunkController =
-      StreamController<({List<double> samples, bool isFinal})>.broadcast();
+      StreamController<({Uint8List audio, bool isFinal})>.broadcast();
 
   /// Constructor
   /// [isDebug] - Whether to enable debug logging (default: false)
@@ -76,7 +76,7 @@ class VadHandler {
   Stream<String> get onError => _onErrorController.stream;
 
   /// Stream of audio chunk events containing intermediate audio data during speech with final flag
-  Stream<({List<double> samples, bool isFinal})> get onEmitChunk =>
+  Stream<({Uint8List audio, bool isFinal})> get onEmitChunk =>
       _onEmitChunkController.stream;
 
   void _handleVadEvent(VadEvent event) {
@@ -111,10 +111,8 @@ class VadHandler {
         break;
       case VadEventType.chunk:
         if (event.audioData != null) {
-          final int16List = event.audioData!.buffer.asInt16List();
-          final floatSamples = int16List.map((e) => e / 32768.0).toList();
           _onEmitChunkController
-              .add((samples: floatSamples, isFinal: event.isFinal ?? false));
+              .add((audio: event.audioData!, isFinal: event.isFinal ?? false));
         }
         break;
     }
